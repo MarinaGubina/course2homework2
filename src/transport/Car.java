@@ -3,17 +3,19 @@ package transport;
 import java.time.LocalDate;
 
 public class Car {
-        private String brand;
-        private String model;
+        private final String brand;
+        private final String model;
         private double engineVolume;
         private String color;
-        private int productionYear;
-        private String productionCountry;
+        private final int productionYear;
+        private final String productionCountry;
         private String transmission;
-        private String type;
+        private final String type;
         private String regNumber;
-        private int capacity;
+        private final int capacity;
         public static String rubber;
+        private Key key;
+        private Insurance insurance;
 
 
         public Car(String brand, String model,Double engineVolume,String color,Integer productionYear,
@@ -61,6 +63,8 @@ public class Car {
                         this.capacity = 5;}
                 else{
                         this.capacity = capacity;}
+                this.key = new Key();
+                this.insurance = new Insurance();
         }
         public static boolean isNullOrEmpty(String val){
                 return val == null || val.isEmpty() || val.isBlank();
@@ -73,6 +77,11 @@ public class Car {
                         return rubber = "Летняя резина";
                 }
         }
+
+        public Insurance getInsurance() {
+                return insurance;
+        }
+
         public String getBrand() {
                 return brand;
         }
@@ -133,14 +142,76 @@ public class Car {
                 this.regNumber = regNumber;}
         }
 
-        @Override
-        public String toString(){
-                return  brand + " " + model + ", год выпуска - " + productionYear +
-                        ", страна производства - "+ productionCountry +
-                        ", цвет - "+ color + ", объем двигателя - "+ engineVolume +
-                ", коробка передач - " + transmission + ", тип кузова: " + type +
-                ", регистрационный номер - " + regNumber + ", вместимость - " + capacity;
+        public Key getKey() {
+                return key;
+        }
+
+        public void setKey(Key key) {
+                this.key = key;
+        }
+        public class Key{
+        private final boolean remoteEngineStart;
+        private final boolean keylessAccess;
+
+        public Key(boolean remoteEngineStart, boolean keylessAccess) {
+                this.remoteEngineStart = remoteEngineStart;
+                this.keylessAccess = keylessAccess;
+        }
+        public Key() {
+                this(false,false);
+        }
+
+        public boolean isRemoteEngineStart() {
+                return remoteEngineStart;
+        }
+
+        public boolean isKeylessAccess() {
+                return keylessAccess;
         }
 }
+public class Insurance{
+        private final LocalDate periodInsurance;
+        private final double costInsurance;
+        private final String numberOfInsurance;
 
+        public Insurance(LocalDate periodInsurance,double costInsurance, String numberOfInsurance){
+                if(periodInsurance == null){
+                        this.periodInsurance = LocalDate.now().plusDays(365);}
+                else{
+                        this.periodInsurance = periodInsurance;}
+                this.costInsurance = costInsurance;
+                if(numberOfInsurance == null){
+                        this.numberOfInsurance = "123456789";
+                }
+                else{
+                        this.numberOfInsurance = numberOfInsurance;
+                }
 
+        }
+        public Insurance(){
+                this(null,10_000,null);
+        }
+        public void checkPeriodInsurance(){
+                if(periodInsurance.isBefore(LocalDate.now())||periodInsurance.isEqual(LocalDate.now())){
+                        System.out.println("Срочно оформите страховку!");
+                }
+        }
+        public void checkNumberOfInsurance(){
+                if(numberOfInsurance.length() != 9){
+                        System.out.println("Некорректный номер");
+                }
+        }
+
+        public LocalDate getPeriodInsurance() {
+                return periodInsurance;
+        }
+
+        public double getCostInsurance() {
+                return costInsurance;
+        }
+
+        public String getNumberOfInsurance() {
+                return numberOfInsurance;
+        }
+}
+}
